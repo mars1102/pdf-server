@@ -2,7 +2,7 @@ const querystring = require('node:querystring')
 const puppeteer = require('puppeteer');
 const router = require('koa-router')()
 
-const buildPdf = async (url) => {
+const buildPdf = async (url, width, height, margin) => {
   // 启动无头浏览器
   const browser = await puppeteer.launch();
   try {
@@ -20,11 +20,13 @@ const buildPdf = async (url) => {
     });
     return await page.pdf({
       margin: {
-        top: 50,
-        bottom: 50,
+        top: 0,
+        bottom: 0,
         left: 0,
         right: 0
       },
+      height: Number(height) + Number(margin),
+      width: Number(width),
       displayHeaderFooter: false,
       printBackground: true,
     });
@@ -42,8 +44,8 @@ router.get('/', async (ctx, next) => {
 })
 
 router.get('/pdf', async (ctx, next) => {
-  const url = querystring.parse(ctx.request.search.slice(1)).url
-  const pdf = await buildPdf(url)
+  const {url, width, height, margin = 0} = querystring.parse(ctx.request.search.slice(1))
+  const pdf = await buildPdf(url, width, height, margin)
 
   ctx.set('Content-Type', 'application/pdf');
   ctx.set('Content-Length', pdf.length);

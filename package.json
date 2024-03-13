@@ -21,7 +21,7 @@
     "koa-views": "^6.2.0",
     "pdf-lib": "^1.17.1",
     "pug": "^2.0.3",
-    "puppeteer": "^13.5.0"
+    "puppeteer": "^16.2.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
